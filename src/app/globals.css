@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+/* Brand tokens from guide.pdf + mockup atmosphere
+   tone-3 (#e3e1dc) — средний светлый тон из фото3 */
+@theme inline {
+  --color-bg: #f4f3ef;
+  --color-bg-warm: #e3e1dc;
+  --color-tone-3: #e3e1dc;
+  --color-ink: #2b2a29;
+  --color-ink-soft: #4c4e4e;
+  --color-ink-strong: #1a1a1a;
+  --color-line: #d4d0c8;
+  --color-line-hover: #4c4e4e;
+  --color-muted: #8a8884;
+  --color-surface: #faf9f6;
+  --color-dark: #1c1b1a;
+  --color-on-dark: #f4f3ef;
+  --color-on-dark-soft: #c8c5be;
+
+  --font-display: var(--font-cormorant);
+  --font-sans: var(--font-manrope);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    overflow-x: clip;
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-manrope), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-bg-warm);
+    color: var(--color-ink-strong);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .tracking-logo {
+    letter-spacing: 0.38em;
+  }
+
+  /* Vertical stripe field from brand photo1 */
+  .bg-stripes {
+    background-color: var(--color-bg);
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--color-bg) 0,
+      var(--color-bg) 56px,
+      var(--color-tone-3) 56px,
+      var(--color-tone-3) 112px
+    );
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee 32s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .marquee-track {
+    animation: none;
+  }
+}
