@@ -1,31 +1,65 @@
 "use client";
 
 import Image from "next/image";
+import { useRef } from "react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { Reveal } from "./Reveal";
 import { RevealImage } from "./RevealImage";
 import { masters } from "@/lib/content";
 
+/* В чёрном баре → выглянула у блока → снова в бар */
+const PEEK_Y = "0%";
+const HIDDEN_Y = "-100%";
+const SPRING = { stiffness: 120, damping: 24, mass: 0.8 };
+
 export function Masters() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const reduceMotion = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    // От появления стыка снизу до ухода секции вверх
+    offset: ["start 0.9", "end start"],
+  });
+
+  // Скрыта → выглядывает у «Руки, которым…» → прячется обратно в бар
+  const yRaw = useTransform(
+    scrollYProgress,
+    [0, 0.2, 0.42, 0.72, 1],
+    [HIDDEN_Y, PEEK_Y, PEEK_Y, HIDDEN_Y, HIDDEN_Y],
+  );
+  const y = useSpring(yRaw, SPRING);
+
   return (
     <section
+      ref={sectionRef}
       id={masters.id}
       className="relative z-0 overflow-visible bg-stripes px-5 pb-24 pt-8 sm:px-8 sm:pb-28 sm:pt-10 lg:px-10 lg:pb-32 lg:pt-12"
       aria-labelledby="masters-title"
     >
-      <Image
-        src="/hand-peek.png"
-        alt=""
-        width={553}
-        height={771}
+      <motion.div
+        className="pointer-events-none absolute left-4 top-0 -z-10 w-[min(38vw,200px)] max-w-none select-none sm:left-10 sm:w-[min(32vw,260px)] lg:left-16 lg:w-[280px]"
+        style={reduceMotion ? { y: HIDDEN_Y } : { y }}
         aria-hidden
-        className="pointer-events-none absolute left-4 top-0 -z-10 w-[min(38vw,200px)] max-w-none -translate-y-[16%] select-none sm:left-10 sm:w-[min(32vw,260px)] lg:left-16 lg:w-[280px]"
-      />
+      >
+        <Image
+          src="/hand-peek.png"
+          alt=""
+          width={553}
+          height={771}
+          className="h-auto w-full"
+          priority={false}
+        />
+      </motion.div>
 
       <div className="relative z-10 mx-auto max-w-[1280px]">
-        <Reveal
-          tone="blur"
-          className="max-w-xl sm:ml-auto sm:text-right"
-        >
+        <Reveal tone="blur" className="max-w-xl sm:ml-auto sm:text-right">
           <h2
             id="masters-title"
             className="font-sans text-[clamp(1.85rem,3.8vw,3rem)] font-medium leading-[1.15] tracking-[-0.02em] text-ink text-balance"

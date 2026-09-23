@@ -1,5 +1,4 @@
 import { Header } from "@/components/Header";
-import { PeekHand } from "@/components/PeekHand";
 import { Hero } from "@/components/Hero";
 import { Marquee } from "@/components/Marquee";
 import { Services } from "@/components/Services";
@@ -14,7 +13,6 @@ export default function Home() {
   return (
     <>
       <Header />
-      <PeekHand />
       <main className="flex-1 overflow-x-clip">
         <div className="relative flex min-h-[100svh] flex-col">
           <Hero />
