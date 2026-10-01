@@ -7,7 +7,15 @@ import { BookingButton } from "./BookingButton";
 import { Reveal } from "./Reveal";
 import { hero } from "@/lib/content";
 
-export function Hero() {
+export function Hero({
+  phone = hero.phone,
+  phoneHref = hero.phoneHref,
+  address = hero.meta,
+}: {
+  phone?: string;
+  phoneHref?: string;
+  address?: string;
+}) {
   const [ready, setReady] = useState(false);
   const reduce = useReducedMotion();
 
@@ -73,9 +81,9 @@ export function Hero() {
             delay={0.36}
             className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-line pt-5 text-[12px] text-muted"
           >
-            <span>{hero.meta}</span>
-            <a href={hero.phoneHref} className="inline-flex min-h-11 items-center transition-colors hover:text-ink">
-              {hero.phone}
+            <span>{address}</span>
+            <a href={phoneHref} className="inline-flex min-h-11 items-center transition-colors hover:text-ink">
+              {phone}
             </a>
           </Reveal>
         </div>

@@ -26,6 +26,8 @@ export function RevealImage({
 
   const animate = ready && !reduce;
   const isFill = imageProps.fill === true;
+  const src = imageProps.src;
+  const remote = typeof src === "string" && /^https?:\/\//i.test(src);
 
   return (
     <motion.div
@@ -50,7 +52,15 @@ export function RevealImage({
           delay,
         }}
       >
-        <Image alt={alt} className={className} {...imageProps} />
+        {remote ? (
+          <img
+            src={src}
+            alt={alt}
+            className={isFill ? `absolute inset-0 h-full w-full ${className}` : String(className)}
+          />
+        ) : (
+          <Image alt={alt} className={className} {...imageProps} />
+        )}
       </motion.div>
     </motion.div>
   );

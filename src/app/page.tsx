@@ -2,32 +2,56 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Marquee } from "@/components/Marquee";
 import { Services } from "@/components/Services";
+import { Offers } from "@/components/Offers";
 import { About } from "@/components/About";
 import { Masters } from "@/components/Masters";
+import { MastersGrid } from "@/components/MastersGrid";
+import { MastersCarousel } from "@/components/MastersCarousel";
 import { Location } from "@/components/Location";
 import { Reviews } from "@/components/Reviews";
 import { Cta } from "@/components/Cta";
 import { Footer } from "@/components/Footer";
+import {
+  DEFAULT_INFO,
+  DEFAULT_MASTERS,
+  DEFAULT_OFFERS,
+  DEFAULT_SERVICES,
+} from "@/lib/content";
+import { getSheetData } from "@/lib/sheets";
 
-export default function Home() {
+export default async function Home() {
+  const sheet = await getSheetData();
+  const serviceItems = sheet?.services ?? DEFAULT_SERVICES;
+  const masterItems = sheet?.masters ?? DEFAULT_MASTERS;
+  const offerItems = sheet?.offers ?? DEFAULT_OFFERS;
+  const salonPhotos = sheet?.salon ?? [];
+  const info = sheet?.info ?? DEFAULT_INFO;
+
   return (
     <>
       <Header />
       <main className="flex-1 overflow-x-clip">
         <div className="relative flex min-h-[100svh] flex-col">
-          <Hero />
+          <Hero phone={info.phone} phoneHref={info.phoneHref} address={info.address} />
           <div className="mt-auto shrink-0">
             <Marquee />
           </div>
         </div>
-        <Services />
+        <Services items={serviceItems} />
+        {offerItems.length > 0 ? <Offers items={offerItems} /> : null}
         <About />
-        <Masters />
-        <Location />
+        <Masters>
+          {masterItems.length > 3 ? (
+            <MastersCarousel items={masterItems} />
+          ) : (
+            <MastersGrid items={masterItems} />
+          )}
+        </Masters>
+        <Location photos={salonPhotos} address={info.address} />
         <Reviews />
-        <Cta />
+        <Cta mailHref={`mailto:${info.email}`} />
       </main>
-      <Footer />
+      <Footer info={info} />
     </>
   );
 }

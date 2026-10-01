@@ -4,7 +4,7 @@ import { BookingButton } from "./BookingButton";
 import { Reveal } from "./Reveal";
 import { cta } from "@/lib/content";
 
-export function Cta() {
+export function Cta({ mailHref = cta.secondaryHref }: { mailHref?: string }) {
   return (
     <section
       id={cta.id}
@@ -26,7 +26,7 @@ export function Cta() {
         </Reveal>
         <Reveal tone="fade-up" delay={0.15} className="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <BookingButton variant="solid-light" className="w-full sm:w-auto">{cta.primary}</BookingButton>
-          <BookingButton href={cta.secondaryHref} variant="outline-light" className="w-full sm:w-auto">
+          <BookingButton href={mailHref} variant="outline-light" className="w-full sm:w-auto">
             {cta.secondary}
           </BookingButton>
         </Reveal>

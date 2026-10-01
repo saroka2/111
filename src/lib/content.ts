@@ -10,11 +10,32 @@ export const site = {
 
 export const nav = [
   { label: "Услуги", href: "#services" },
+  { label: "Интересные предложения", href: "#offers" },
   { label: "О нас", href: "#about" },
   { label: "Мастера", href: "#masters" },
   { label: "Отзывы", href: "#reviews" },
   { label: "Контакты", href: "#contacts" },
 ] as const;
+
+export type OfferItem = {
+  title: string;
+  description: string;
+  price: string;
+  photo: string | null;
+};
+
+export const DEFAULT_OFFERS: OfferItem[] = [
+  { title: "Стрижка и уход", description: "", price: "5 900 ₽", photo: null },
+  { title: "Окрашивание", description: "", price: "6 500 ₽", photo: null },
+  { title: "Маникюр и педикюр", description: "", price: "5 200 ₽", photo: null },
+];
+
+export const offers = {
+  id: "offers",
+  title: "Интересные предложения",
+  subtitle: "Специальные форматы и цены — их можно взять уже сейчас.",
+  items: DEFAULT_OFFERS,
+} as const;
 
 export const hero = {
   line1: "Пространство,",
@@ -40,13 +61,14 @@ export const marquee = [
   "Self care",
 ] as const;
 
-export const services = {
-  id: "services",
-  title: "Каждый визит — как маленький ритуал",
-  subtitle:
-    "Подбираем формат под тебя: от быстрой формы до полного преображения. Цены-ориентиры — точные скажем при записи.",
-  cta: "Полный прайс",
-  items: [
+export type ServiceItem = {
+  title: string;
+  description: string;
+  duration: string;
+  price: string;
+};
+
+export const DEFAULT_SERVICES: ServiceItem[] = [
     {
       title: "Стрижка",
       description: "Форма, которая держится и подчёркивает черты лица.",
@@ -83,7 +105,15 @@ export const services = {
       price: "от 1 800 ₽",
       duration: "40 м — 1 ч",
     },
-  ],
+];
+
+export const services = {
+  id: "services",
+  title: "Каждый визит — как маленький ритуал",
+  subtitle:
+    "Подбираем формат под тебя: от быстрой формы до полного преображения. Цены-ориентиры — точные скажем при записи.",
+  cta: "Полный прайс",
+  items: DEFAULT_SERVICES,
 } as const;
 
 export const about = {
@@ -101,24 +131,23 @@ export const about = {
   ],
 } as const;
 
+export type MasterItem = {
+  name: string;
+  role: string;
+  photo: string | null;
+};
+
+export const DEFAULT_MASTERS: MasterItem[] = [
+  { name: "Марина", role: "Топ-стилист · цвет", photo: null },
+  { name: "Анна", role: "Стилист · форма", photo: null },
+  { name: "Елена", role: "Nail-мастер", photo: null },
+];
+
 export const masters = {
   id: "masters",
   title: "Руки, которым доверяют форму",
   subtitle: "Мастера, которые аккуратно воплощают запрос.",
-  items: [
-    {
-      name: "Марина",
-      role: "Топ-стилист · цвет",
-    },
-    {
-      name: "Анна",
-      role: "Стилист · форма",
-    },
-    {
-      name: "Елена",
-      role: "Nail-мастер",
-    },
-  ],
+  items: DEFAULT_MASTERS,
 } as const;
 
 export const location = {
@@ -162,10 +191,21 @@ export const cta = {
   secondaryHref: "mailto:hello@vtornik.studio",
 } as const;
 
+export type HourRow = { days: string; time: string };
+export type SocialLink = { label: string; href: string };
+
+export type SiteInfo = {
+  address: string;
+  phone: string;
+  phoneHref: string;
+  email: string;
+  hours: HourRow[];
+  socials: SocialLink[];
+};
+
 export const contacts = {
   id: "contacts",
-  address: "ул. Володарского, 4",
-  city: "Екатеринбург",
+  address: "Екатеринбург, ул. Володарского, 4",
   phone: "+7 (900) 000-00-00",
   phoneHref: "tel:+79000000000",
   email: "hello@vtornik.studio",
@@ -173,14 +213,23 @@ export const contacts = {
     { days: "Вт — Пт", time: "11:00 — 20:00" },
     { days: "Сб — Вс", time: "12:00 — 19:00" },
     { days: "Пн", time: "выходной" },
-  ],
+  ] satisfies HourRow[],
   socials: [
     { label: "Telegram", href: "#" },
     { label: "Instagram*", href: "#" },
     { label: "VK", href: "#" },
-  ],
+  ] satisfies SocialLink[],
   note: "*Meta признана экстремистской организацией на территории РФ",
 } as const;
+
+export const DEFAULT_INFO: SiteInfo = {
+  address: contacts.address,
+  phone: contacts.phone,
+  phoneHref: contacts.phoneHref,
+  email: contacts.email,
+  hours: contacts.hours.map((row) => ({ ...row })),
+  socials: contacts.socials.map((row) => ({ ...row })),
+};
 
 export const footer = {
   copy: "© ВТОРНИК, 2026",

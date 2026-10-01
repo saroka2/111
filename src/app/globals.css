@@ -86,3 +86,34 @@
     animation: none;
   }
 }
+
+/* Белый текст виден только внутри силуэта руки */
+.masters-hand-mask {
+  -webkit-mask-image: url("/hand-peek.png");
+  mask-image: url("/hand-peek.png");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  mask-mode: alpha;
+  -webkit-mask-size: min(38vw, 200px) auto;
+  mask-size: min(38vw, 200px) auto;
+  -webkit-mask-position: 1rem var(--hand-y);
+  mask-position: 1rem var(--hand-y);
+}
+
+@media (min-width: 640px) {
+  .masters-hand-mask {
+    -webkit-mask-size: min(32vw, 260px) auto;
+    mask-size: min(32vw, 260px) auto;
+    -webkit-mask-position: 2.5rem var(--hand-y);
+    mask-position: 2.5rem var(--hand-y);
+  }
+}
+
+@media (min-width: 1024px) {
+  .masters-hand-mask {
+    -webkit-mask-size: 280px auto;
+    mask-size: 280px auto;
+    -webkit-mask-position: 4rem var(--hand-y);
+    mask-position: 4rem var(--hand-y);
+  }
+}

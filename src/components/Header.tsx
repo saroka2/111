@@ -76,7 +76,7 @@ export function Header() {
       <div
         id="mobile-menu"
         className={`overflow-hidden border-t border-line/70 bg-bg/95 backdrop-blur-md transition-[max-height,opacity] duration-500 lg:hidden ${
-          open ? "max-h-[480px] opacity-100" : "max-h-0 opacity-0"
+          open ? "max-h-[560px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <nav className="flex flex-col gap-1 px-5 py-6 sm:px-8" aria-label="Мобильная навигация">

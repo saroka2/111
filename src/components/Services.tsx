@@ -3,8 +3,9 @@
 import { BookingButton } from "./BookingButton";
 import { Reveal } from "./Reveal";
 import { services } from "@/lib/content";
+import type { ServiceItem } from "@/lib/content";
 
-export function Services() {
+export function Services({ items }: { items: ServiceItem[] }) {
   return (
     <section
       id={services.id}
@@ -29,8 +30,8 @@ export function Services() {
         </div>
 
         <ul className="mt-16 border-t border-line">
-          {services.items.map((item, i) => (
-            <Reveal key={item.title} as="li" tone="fade-up" delay={0.05 * i} amount={0.35}>
+          {items.map((item, i) => (
+            <Reveal key={`${item.title}-${i}`} as="li" tone="fade-up" delay={0.05 * i} amount={0.35}>
               <article className="grid grid-cols-[2.25rem_minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1 border-b border-line py-7 sm:grid-cols-[3rem_1fr_auto] sm:gap-x-6 sm:py-8 lg:grid-cols-[3.5rem_minmax(0,1.3fr)_minmax(0,1fr)_7.5rem]">
                 <span className="pt-1 text-[11px] tracking-[0.18em] text-muted">
                   {String(i + 1).padStart(2, "0")}

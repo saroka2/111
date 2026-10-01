@@ -10,7 +10,43 @@ const placeholders = [
   { aspect: "aspect-square", className: "lg:pt-16" },
 ] as const;
 
-export function Location() {
+function FramePhoto({
+  src,
+  sizes,
+  pad,
+}: {
+  src: string | null;
+  sizes: string;
+  pad: string;
+}) {
+  if (src) {
+    return (
+      <img
+        src={src}
+        alt="Интерьер салона ВТОРНИК"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+    );
+  }
+
+  return (
+    <Image
+      src="/hand.png"
+      alt=""
+      fill
+      sizes={sizes}
+      className={`object-contain opacity-35 grayscale ${pad}`}
+    />
+  );
+}
+
+export function Location({
+  photos = [],
+  address = location.address,
+}: {
+  photos?: string[];
+  address?: string;
+}) {
   return (
     <section
       id={location.id}
@@ -31,14 +67,12 @@ export function Location() {
           <Reveal tone="fade-up" delay={0.06}>
             <div
               className={`relative ${placeholders[0].aspect} overflow-hidden rounded-[1.25rem] bg-tone-3`}
-              aria-hidden
+              aria-hidden={photos[0] ? undefined : true}
             >
-              <Image
-                src="/hand.png"
-                alt=""
-                fill
+              <FramePhoto
+                src={photos[0] ?? null}
                 sizes="(max-width: 1024px) 100vw, 38vw"
-                className="object-contain p-12 opacity-35 grayscale"
+                pad="p-12"
               />
             </div>
           </Reveal>
@@ -47,14 +81,12 @@ export function Location() {
             <Reveal tone="fade-up" delay={0.1}>
               <div
                 className={`relative ${placeholders[1].aspect} overflow-hidden rounded-[1.25rem] bg-tone-3`}
-                aria-hidden
+                aria-hidden={photos[1] ? undefined : true}
               >
-                <Image
-                  src="/hand.png"
-                  alt=""
-                  fill
+                <FramePhoto
+                  src={photos[1] ?? null}
                   sizes="(max-width: 1024px) 100vw, 30vw"
-                  className="object-contain p-12 opacity-35 grayscale"
+                  pad="p-12"
                 />
               </div>
             </Reveal>
@@ -67,7 +99,7 @@ export function Location() {
                 <p className="mt-3 text-[14px] leading-relaxed text-ink-soft">
                   {location.text}
                 </p>
-                <p className="mt-4 text-[13px] text-muted">{location.address}</p>
+                <p className="mt-4 text-[13px] text-muted">{address}</p>
               </div>
             </Reveal>
           </div>
@@ -75,14 +107,12 @@ export function Location() {
           <Reveal tone="fade-up" delay={0.14} className={placeholders[2].className}>
             <div
               className={`relative ${placeholders[2].aspect} overflow-hidden rounded-[1.25rem] bg-tone-3`}
-              aria-hidden
+              aria-hidden={photos[2] ? undefined : true}
             >
-              <Image
-                src="/hand.png"
-                alt=""
-                fill
+              <FramePhoto
+                src={photos[2] ?? null}
                 sizes="(max-width: 1024px) 100vw, 28vw"
-                className="object-contain p-10 opacity-35 grayscale"
+                pad="p-10"
               />
             </div>
           </Reveal>
