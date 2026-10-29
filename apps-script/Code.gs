@@ -19,7 +19,8 @@
  * Сам адрес при этом не меняется.
  *
  * Вкладки таблицы должны называться точно так:
- * «Услуги», «Мастера», «Предложения», «Ф. Салона», «Основная инфа».
+ * «Услуги», «Мастера», «Предложения», «Ф. Салона»,
+ * «Администраторы», «Основная инфа».
  * Первая строка каждой вкладки — заголовки, их не удалять.
  */
 
@@ -28,6 +29,7 @@ var TABS = {
   masters: "Мастера",
   offers: "Предложения",
   salon: "Ф. Салона",
+  admins: "Администраторы",
   info: "Основная инфа",
 };
 
@@ -38,6 +40,7 @@ function doGet() {
     services: readTab(book, TABS.services, mapService),
     masters: readTab(book, TABS.masters, mapMaster),
     offers: readTab(book, TABS.offers, mapOffer),
+    admins: readTab(book, TABS.admins, mapAdmin),
     salon: readTab(book, TABS.salon, mapSalon),
     info: readInfo(book),
   };
@@ -80,6 +83,7 @@ function mapService(row, columns) {
     description: cell(row, columns, "описание"),
     duration: cell(row, columns, "длительность"),
     price: cell(row, columns, "цена"),
+    group: cell(row, columns, "группа") || "Волосы",
   };
 }
 
@@ -90,7 +94,22 @@ function mapMaster(row, columns) {
     order: orderOf(row, columns),
     name: name,
     role: cell(row, columns, "роль"),
+    group: cell(row, columns, "группа") || "Мастера",
+    description: cell(row, columns, "описание"),
     photo: cell(row, columns, "фото_ссылка") || cell(row, columns, "фото"),
+    bookingUrl:
+      cell(row, columns, "запись_ссылка") || cell(row, columns, "запись"),
+  };
+}
+
+function mapAdmin(row, columns) {
+  var name = cell(row, columns, "имя");
+  if (!name) return null;
+  return {
+    order: orderOf(row, columns),
+    name: name,
+    photo: cell(row, columns, "фото_ссылка") || cell(row, columns, "фото"),
+    description: cell(row, columns, "описание"),
   };
 }
 
@@ -107,6 +126,7 @@ function readInfo(book) {
   var email = "";
   var phone = "";
   var socials = [];
+  var messengers = [];
 
   for (var i = 1; i < values.length; i++) {
     if (isBlankRow(values[i])) continue;
@@ -125,6 +145,15 @@ function readInfo(book) {
       var linked = cellLink(sheet, i + 1, socialCol);
       if (linked.label || linked.href) socials.push(linked);
     }
+
+    // Колонка «Месенджеры» / «Мессенджеры» — для кнопки «Написать»
+    var messengerCol = columns["месенджеры"];
+    if (messengerCol === undefined) messengerCol = columns["мессенджеры"];
+    if (messengerCol === undefined) messengerCol = columns["messengers"];
+    if (messengerCol !== undefined) {
+      var msg = cellLink(sheet, i + 1, messengerCol);
+      if (msg.label || msg.href) messengers.push(msg);
+    }
   }
 
   return {
@@ -133,6 +162,7 @@ function readInfo(book) {
     phone: phone,
     hours: hours,
     socials: socials,
+    messengers: messengers,
   };
 }
 

@@ -2,9 +2,14 @@
 
 import { BookingButton } from "./BookingButton";
 import { Reveal } from "./Reveal";
-import { cta } from "@/lib/content";
+import { WriteButton } from "./WriteButton";
+import { cta, type WriteChannel } from "@/lib/content";
 
-export function Cta({ mailHref = cta.secondaryHref }: { mailHref?: string }) {
+export function Cta({
+  writeChannels,
+}: {
+  writeChannels?: WriteChannel[];
+}) {
   return (
     <section
       id={cta.id}
@@ -24,11 +29,21 @@ export function Cta({ mailHref = cta.secondaryHref }: { mailHref?: string }) {
             </span>
           </h2>
         </Reveal>
-        <Reveal tone="fade-up" delay={0.15} className="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-          <BookingButton variant="solid-light" className="w-full sm:w-auto">{cta.primary}</BookingButton>
-          <BookingButton href={mailHref} variant="outline-light" className="w-full sm:w-auto">
-            {cta.secondary}
+        <Reveal
+          tone="fade-up"
+          delay={0.15}
+          className="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center"
+        >
+          <BookingButton variant="solid-light" className="w-full sm:w-auto">
+            {cta.primary}
           </BookingButton>
+          <WriteButton
+            channels={writeChannels}
+            showIcon={false}
+            className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-on-dark/35 bg-transparent px-7 py-3 text-[12px] tracking-[0.04em] text-on-dark transition-colors duration-300 hover:border-on-dark sm:w-auto"
+          >
+            {cta.secondary}
+          </WriteButton>
         </Reveal>
       </div>
     </section>

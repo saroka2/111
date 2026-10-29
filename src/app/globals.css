@@ -16,6 +16,8 @@
   --color-dark: #1c1b1a;
   --color-on-dark: #f4f3ef;
   --color-on-dark-soft: #c8c5be;
+  /* Текст сквозь силуэт руки — тёплый ламповый коричневый */
+  --color-hand-reveal: #c4a06a;
 
   --font-display: var(--font-cormorant);
   --font-sans: var(--font-manrope);
@@ -62,32 +64,20 @@
       var(--color-tone-3) 112px
     );
   }
+
 }
 
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
+/* Тёплый текст в силуэте руки + глубина */
+.masters-hand-text {
+  color: var(--color-hand-reveal);
+  text-shadow:
+    0 1px 0 rgba(255, 228, 180, 0.3),
+    0 -1px 2px rgba(35, 18, 6, 0.65),
+    0 2px 4px rgba(25, 12, 4, 0.45),
+    0 0 12px rgba(120, 70, 30, 0.28);
 }
 
-.marquee-track {
-  animation: marquee 32s linear infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  .marquee-track {
-    animation: none;
-  }
-}
-
-/* Белый текст виден только внутри силуэта руки */
+/* Текст виден только внутри силуэта руки */
 .masters-hand-mask {
   -webkit-mask-image: url("/hand-peek.png");
   mask-image: url("/hand-peek.png");
@@ -117,3 +107,27 @@
     mask-position: 4rem var(--hand-y);
   }
 }
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee 32s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .marquee-track {
+    animation: none;
+  }
+}
+

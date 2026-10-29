@@ -15,7 +15,7 @@ export function Marquee() {
             className="flex items-center gap-8 text-[11px] uppercase tracking-[0.28em] text-ink-soft"
           >
             {item}
-            <span className="text-[8px] text-muted">✦</span>
+            <span className="text-[14px] leading-none text-muted">✦</span>
           </span>
         ))}
       </div>

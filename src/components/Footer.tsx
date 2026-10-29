@@ -1,6 +1,10 @@
 import { contacts, footer, nav, site, type SiteInfo } from "@/lib/content";
 
 export function Footer({ info }: { info: SiteInfo }) {
+  const showMetaNote =
+    info.socials.some((s) => s.label.includes("*")) ||
+    info.messengers.some((s) => s.label.includes("*"));
+
   return (
     <footer id={contacts.id} className="border-t border-line bg-bg px-5 py-16 sm:px-8 lg:px-10 lg:py-20">
       <div className="mx-auto grid max-w-[1280px] gap-12 lg:grid-cols-[1.2fr_1fr_1fr] lg:gap-16">
@@ -36,7 +40,12 @@ export function Footer({ info }: { info: SiteInfo }) {
             Контакты
           </p>
           <ul className="space-y-2.5 text-sm text-ink-soft">
-            <li>{info.address}</li>
+            <li>
+              {info.address}
+              {info.addressNote ? (
+                <span className="text-[12px] text-muted"> ({info.addressNote})</span>
+              ) : null}
+            </li>
             <li>
               <a href={info.phoneHref} className="inline-flex min-h-11 items-center transition-colors hover:text-ink">
                 {info.phone}
@@ -51,7 +60,8 @@ export function Footer({ info }: { info: SiteInfo }) {
               </a>
             </li>
           </ul>
-          <ul className="mt-5 space-y-1.5 text-sm text-ink-soft">
+          <p className="mt-5 text-sm text-ink-soft">{info.hoursText}</p>
+          <ul className="mt-3 space-y-1.5 text-sm text-ink-soft">
             {info.hours.map((row) => (
               <li key={row.days} className="flex justify-between gap-4 max-w-[220px]">
                 <span>{row.days}</span>
@@ -74,7 +84,7 @@ export function Footer({ info }: { info: SiteInfo }) {
               </li>
             ))}
           </ul>
-          {info.socials.some((s) => s.label.includes("*")) ? (
+          {showMetaNote ? (
             <p className="mt-3 max-w-xs text-[11px] leading-relaxed text-muted">
               {contacts.note}
             </p>

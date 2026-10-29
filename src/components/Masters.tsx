@@ -1,7 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useLayoutEffect, useRef } from "react";
+import {
+  createContext,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import {
   motion,
   useMotionValue,
@@ -11,25 +17,27 @@ import {
   useTransform,
 } from "framer-motion";
 import { masters } from "@/lib/content";
-import type { ReactNode } from "react";
 
-/* 0 — рука на месте, -1 — целиком в чёрном баре */
+/* 0 — рука на месте, -1 — целиком уходит вверх (выглядит как «из бара») */
 const SHIFT = [0, 0.2, 0.42, 0.72, 1];
 const SHIFT_Y = [-1, 0, 0, -1, -1];
 const SPRING = { stiffness: 120, damping: 24, mass: 0.8 };
+
+/** Слот внутри маски руки — сюда порталятся заголовки групп. */
+export const MastersMaskSlotContext = createContext<HTMLElement | null>(null);
 
 function MastersHeading({
   id,
   tone,
 }: {
   id?: string;
-  tone: "ink" | "white";
+  tone: "ink" | "reveal";
 }) {
-  const title = tone === "ink" ? "text-ink" : "text-white";
-  const subtitle = tone === "ink" ? "text-ink-soft" : "text-white";
+  const title = tone === "ink" ? "text-ink" : "masters-hand-text";
+  const subtitle = tone === "ink" ? "text-ink-soft" : "masters-hand-text";
 
   return (
-    <div className="max-w-xl sm:ml-auto sm:text-right">
+    <div className="ml-auto w-[min(62%,22rem)] max-w-full text-right sm:w-auto sm:max-w-xl">
       <h2
         id={id}
         className={`font-sans text-[clamp(1.85rem,3.8vw,3rem)] font-medium leading-[1.15] tracking-[-0.02em] text-balance ${title}`}
@@ -44,6 +52,7 @@ function MastersHeading({
 export function Masters({ children }: { children: ReactNode }) {
   const sectionRef = useRef<HTMLElement>(null);
   const handRef = useRef<HTMLDivElement>(null);
+  const [maskSlot, setMaskSlot] = useState<HTMLElement | null>(null);
   const reduceMotion = useReducedMotion();
   const handHeight = useMotionValue(0);
 
@@ -98,17 +107,27 @@ export function Masters({ children }: { children: ReactNode }) {
         />
       </motion.div>
 
+      {/* Текст тёплого цвета виден только внутри силуэта руки */}
       <motion.div
         className="masters-hand-mask pointer-events-none absolute inset-0 z-30"
         style={{ ["--hand-y" as string]: handY }}
         aria-hidden
       >
         <div className="mx-auto max-w-[1280px] px-5 pt-8 sm:px-8 sm:pt-10 lg:px-10 lg:pt-12">
-          <MastersHeading tone="white" />
+          <MastersHeading tone="reveal" />
         </div>
+        <div
+          ref={setMaskSlot}
+          className="mx-auto max-w-[1280px] px-5 sm:px-8 lg:px-10"
+        />
       </motion.div>
 
-      <div className="relative z-40 mx-auto min-w-0 max-w-[1280px]">{children}</div>
+      {/* Заголовки под рукой; кружки внутри поднимаются через z-40 */}
+      <div className="relative mx-auto min-w-0 max-w-[1280px]">
+        <MastersMaskSlotContext.Provider value={maskSlot}>
+          {children}
+        </MastersMaskSlotContext.Provider>
+      </div>
     </section>
   );
 }

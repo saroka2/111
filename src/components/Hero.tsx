@@ -5,16 +5,18 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { BookingButton } from "./BookingButton";
 import { Reveal } from "./Reveal";
-import { hero } from "@/lib/content";
+import { CONTACTS, formatAddress, hero } from "@/lib/content";
 
 export function Hero({
-  phone = hero.phone,
-  phoneHref = hero.phoneHref,
-  address = hero.meta,
+  phone = CONTACTS.phone,
+  phoneHref = CONTACTS.phoneHref,
+  address = CONTACTS.address,
+  addressNote = CONTACTS.addressNote,
 }: {
   phone?: string;
   phoneHref?: string;
   address?: string;
+  addressNote?: string;
 }) {
   const [ready, setReady] = useState(false);
   const reduce = useReducedMotion();
@@ -25,11 +27,12 @@ export function Hero({
 
   const animate = ready && !reduce;
   const viewport = { once: false, amount: 0.35, margin: "0px 0px -10% 0px" } as const;
+  const addressLine = formatAddress(address, addressNote, { withCity: true });
 
   return (
     <section
       id="top"
-      className="relative flex flex-1 flex-col overflow-hidden bg-bg pt-[4.5rem]"
+      className="relative flex flex-1 flex-col overflow-hidden bg-bg"
       aria-labelledby="hero-title"
     >
       <div className="mx-auto grid w-full max-w-[1280px] flex-1 items-center gap-8 px-5 pb-6 pt-8 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8 lg:px-10 lg:pb-8 lg:pt-10">
@@ -65,11 +68,17 @@ export function Hero({
             </motion.span>
           </motion.h1>
 
-          <Reveal tone="fade-up" delay={0.2} className="mt-7 max-w-md">
+          <Reveal tone="fade-up" delay={0.18} className="mt-5 max-w-lg">
+            <p className="font-display text-[clamp(1.15rem,2.8vw,1.55rem)] italic leading-snug text-ink">
+              {hero.slogan}
+            </p>
+          </Reveal>
+
+          <Reveal tone="fade-up" delay={0.24} className="mt-6 max-w-md">
             <p className="text-[15px] leading-relaxed text-ink-soft">{hero.subtitle}</p>
           </Reveal>
 
-          <Reveal tone="fade-up" delay={0.28} className="mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+          <Reveal tone="fade-up" delay={0.3} className="mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
             <BookingButton className="w-full sm:w-auto">{hero.primaryCta}</BookingButton>
             <BookingButton href={hero.secondaryHref} variant="outline" className="w-full sm:w-auto">
               {hero.secondaryCta}
@@ -81,7 +90,13 @@ export function Hero({
             delay={0.36}
             className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-line pt-5 text-[12px] text-muted"
           >
-            <span>{address}</span>
+            <span>
+              {address}
+              {addressNote ? (
+                <span className="text-[11px] text-muted"> ({addressNote})</span>
+              ) : null}
+              <span className="sr-only">. {addressLine}</span>
+            </span>
             <a href={phoneHref} className="inline-flex min-h-11 items-center transition-colors hover:text-ink">
               {phone}
             </a>
